@@ -111,4 +111,78 @@ public class ContatoDao {
 
     } //final função list<contatos>
 
+    public void update (Contato contato) {
+
+        String sql = "UPDATE contatos SET nome = ?, idade = ?, dataCadastro = ? " +
+                "WHERE id = ?";
+
+        Connection conn = null;
+        PreparedStatement pstm = null;
+
+        try {
+
+            conn = ConnectionFactory.creatConectionMySql(); //criando a conexão com o BD
+
+            pstm = conn.prepareStatement(sql); //inserindo os dados no sql (SELECT * FROM)
+
+            pstm.setString(1, contato.getNome());
+            pstm.setInt(2, contato.getIdade());
+            pstm.setDate(3, new Date(contato.getDataCadastro().getTime()));
+            pstm.setInt(4, contato.getId());
+
+            pstm.execute();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        } finally {
+            try {
+                if (pstm != null) {
+                    pstm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+                }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    } //fim update contato
+
+
+    public void delete (Contato contato) {
+
+        String sql = "DELETE FROM contatos WHERE id = ?;";
+
+        Connection conn = null;
+        PreparedStatement pstm = null;
+
+        try {
+            conn = ConnectionFactory.creatConectionMySql();
+            pstm = conn.prepareStatement(sql);
+
+            pstm.setInt(1, contato.getId());
+
+            pstm.execute();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstm!= null) {
+                    pstm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+
+
 }
